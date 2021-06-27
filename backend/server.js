@@ -24,9 +24,13 @@ app.get('/resetDb', (req, res) => {
     }
 });
 
-app.post('/register', (req, res) => {
-    dao.addUser(req.body);
-    res.send()
+app.post('/register', async (req, res) => {
+    try {
+        await dao.addUser(req.body);
+        res.send();
+    } catch (error) {
+        res.status(500).send("Error: \n" + error.message, )
+    }
 });
 
 

@@ -19,7 +19,7 @@ module.exports.addUser = async function (data) {
     user.password = await bcrypt.hash(user.password, 10);
 
     // TODO: Check for duplicate username/email
-    
+
     // Inserting
     let stmt = db.prepare("INSERT INTO user(username, email, first_name, last_name, password, country, date_of_birth) VALUES(@username, @email, @first_name, @last_name, @password, @country, @date_of_birth)");
     stmt.run({
@@ -31,6 +31,4 @@ module.exports.addUser = async function (data) {
         country: user.country,
         date_of_birth: user.dateOfBirth
     })
-
-    console.log(user)
 }
