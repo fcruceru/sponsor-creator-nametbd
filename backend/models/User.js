@@ -1,5 +1,6 @@
 const schema = {
     username: null,
+    email: null,
     firstName: null,
     lastName: null,
     password: null,

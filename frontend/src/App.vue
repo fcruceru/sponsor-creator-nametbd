@@ -2,11 +2,27 @@
   <div id="app">
     <div id="nav">
       <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+      <router-link v-if="!loggedIn" to="/register">Register</router-link>
+      <a v-else @click="logout" style="cursor: pointer; color: #42b983;">Logout</a>
     </div>
     <router-view/>
   </div>
 </template>
+
+<script>
+export default {
+  methods: {
+    logout() {
+      console.log("logout")
+    }
+  },
+  computed: {
+    loggedIn() {
+      return this.$store.getters["auth/loggedIn"];
+    }
+  }
+}
+</script>
 
 <style lang="scss">
 #app {
