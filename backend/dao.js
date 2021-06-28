@@ -22,7 +22,7 @@ module.exports.addUser = async function (data) {
 
     // Inserting
     let stmt = db.prepare("INSERT INTO user(username, email, first_name, last_name, password, country, date_of_birth) VALUES(@username, @email, @first_name, @last_name, @password, @country, @date_of_birth)");
-    stmt.run({
+    let info = stmt.run({
         username: user.username,
         email: user.email,
         first_name: user.firstName,
@@ -31,4 +31,11 @@ module.exports.addUser = async function (data) {
         country: user.country,
         date_of_birth: user.dateOfBirth
     })
+
+    return info.lastInsertRowid;
+}
+
+module.exports.getUserById = function(id) {
+    let stmt = db.prepare("SELECT * FROM user WHERE id = ?");
+    return stmt.get(id);
 }

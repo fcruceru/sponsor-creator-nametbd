@@ -26,8 +26,9 @@ app.get('/resetDb', (req, res) => {
 
 app.post('/register', async (req, res) => {
     try {
-        await dao.addUser(req.body);
-        res.send();
+        let newUserId = await dao.addUser(req.body);
+        let newUser = await dao.getUserById(newUserId);
+        res.status(201).send(newUser); // Status 201 = created
     } catch (error) {
         res.status(500).send("Error: \n" + error.message, )
     }

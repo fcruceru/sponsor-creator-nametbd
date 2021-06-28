@@ -107,7 +107,7 @@
         required
       ></b-form-input>
 
-      <b-button class="mt-2" type="submit" variant="primary">Register</b-button>
+      <b-button class="mt-3" type="submit" variant="primary">Register</b-button>
     </b-form>
   </div>
 </template>
@@ -135,11 +135,14 @@ export default {
   methods: {
     register(event) {
       event.preventDefault();
-      console.log(this.form);
+      this.$store.dispatch("auth/register", this.form);
     },
   },
 };
 </script>
 
 <style lang="scss">
+.form-group {
+    margin-bottom: 5px;
+}
 </style>
