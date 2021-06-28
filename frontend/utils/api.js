@@ -9,3 +9,7 @@ const axiosInstance = axios.create({
 export function registerUser(username, email, firstName, lastName, password, country, dateOfBirth) {
     return axiosInstance.post('/register?', {username, email, firstName, lastName, password, country, dateOfBirth});
 }
+
+export function login(email, password) {
+    return axiosInstance.post('/login?', {email, password});
+}

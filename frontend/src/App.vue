@@ -1,8 +1,10 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link v-if="!loggedIn" to="/register">Register</router-link>
+      <router-link to="/">Home | </router-link>
+      <router-link v-if="!loggedIn" to="/register">Register | </router-link>
+      <router-link v-else to="/user-profile">User Profile</router-link>
+      <router-link v-if="!loggedIn" to="/login">Login</router-link>
       <a v-else @click="logout" style="cursor: pointer; color: #42b983;">Logout</a>
     </div>
     <router-view/>

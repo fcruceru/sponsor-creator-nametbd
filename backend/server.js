@@ -11,16 +11,19 @@ const dao = require('./dao');
 // Setting CORS on all requests
 app.use(cors());
 
+const bcrypt = require('bcrypt');
+
+
 app.get('/testconn', (req, res) => {
-    res.send('Working Connection');
+    return res.send('Working Connection');
 });
 
 app.get('/resetDb', (req, res) => {
     try {
         dao.resetDb();
-        res.send("Successfully reset DB.");
+        return res.send("Successfully reset DB.");
     } catch (error) {
-        res.status(500).send("Error: \n" + error.message, )
+        return res.status(500).send("Error: \n" + error.message,)
     }
 });
 
@@ -28,9 +31,35 @@ app.post('/register', async (req, res) => {
     try {
         let newUserId = await dao.addUser(req.body);
         let newUser = await dao.getUserById(newUserId);
-        res.status(201).send(newUser); // Status 201 = created
+        return res.status(201).send(newUser); // Status 201 = created
     } catch (error) {
-        res.status(500).send("Error: \n" + error.message, )
+        return res.status(500).send("Error: \n" + error.message,)
+    }
+});
+
+app.post('/login', async (req, res) => {
+    try {
+        // Check user exists
+        let user = await dao.getUserByEmail(req.body.email);
+        if (!user) {
+            return res.status(401).send({
+                success: false,
+                reason: "Invalid username entered. Are you sure you entered the correct username?"
+            })
+        }
+
+        // Verify password
+        if (!await bcrypt.compare(req.body.password, user.password)) {
+            return res.status(401).send({
+                success: false,
+                reason: "Invalid password entered. Double check you entered the correct password and try again."
+            })
+        }
+        else {
+            return res.status(200).send(user);
+        }
+    } catch (error) {
+        return res.status(500).send("Error: \n" + error.message,)
     }
 });
 

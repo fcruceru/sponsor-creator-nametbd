@@ -1,6 +1,7 @@
 import Vue from 'vue';
 const axios = require('axios');
 const api = require('../../utils/api');
+import { router } from "../router";
 
 export default {
     namespaced: true,
@@ -30,8 +31,19 @@ export default {
                 }
             })
         },
-        logout({ commit }) {
-            commit("logout");
+        login(context, user) {
+            return api.login(user.email, user.password).then((res) => {
+                context.commit("login", res.data);
+                return res.data
+            }).catch((error) => {
+                console.log(error)
+                if (error.response.data.reason) {
+                    Vue.swal('Error', error.response.data.reason, 'error');
+                }
+            })
+        },
+        logout(context) {
+            context.commit("logout");
         }
     }
 }

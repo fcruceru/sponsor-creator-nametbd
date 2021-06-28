@@ -39,3 +39,8 @@ module.exports.getUserById = function(id) {
     let stmt = db.prepare("SELECT * FROM user WHERE id = ?");
     return stmt.get(id);
 }
+
+module.exports.getUserByEmail = function(email) {
+    let stmt = db.prepare("SELECT * FROM user WHERE email = ?");
+    return stmt.get(email);
+}
