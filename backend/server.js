@@ -1,3 +1,6 @@
+// Loading env variables
+require('dotenv').config();
+
 // Express
 const express = require('express')
 const cors = require('cors');
@@ -5,11 +8,13 @@ const app = express();
 app.use(express.json());
 const port = 3000;
 
+// Setting CORS on all requests
+app.use(cors());
+
 // DB
 const dao = require('./dao');
 
-// Setting CORS on all requests
-app.use(cors());
+const auth = require('./utils/auth');
 
 const bcrypt = require('bcrypt');
 
@@ -56,7 +61,12 @@ app.post('/login', async (req, res) => {
             })
         }
         else {
-            return res.status(200).send(user);
+            let token = await auth.generateJwtToken(user);
+
+            return res.status(200).send({
+                user,
+                token
+            });
         }
     } catch (error) {
         return res.status(500).send("Error: \n" + error.message,)

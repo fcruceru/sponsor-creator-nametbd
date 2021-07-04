@@ -33,7 +33,8 @@ export default {
         },
         login(context, user) {
             return api.login(user.email, user.password).then((res) => {
-                context.commit("login", res.data);
+                context.commit("login", res.data.user);
+                api.setToken(res.data.token);
                 return res.data
             }).catch((error) => {
                 console.log(error)
