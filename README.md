@@ -21,3 +21,7 @@ The backend is ran by clicking on the `Run and debug` button in the top left cor
 >This will start the server hosting the API as well as attach the debugger to the correct process.
 
 TODO: Environment variables
+
+To initialize the database tables, call the `/resetDb` endpoint with a GET request. After this, you should be all set.
+
+TODO: Add an npm script to initialise db
