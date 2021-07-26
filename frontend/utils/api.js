@@ -7,6 +7,12 @@ const axiosInstance = axios.create({
     baseURL: "http://localhost:3000"
 });
 
+// Getting token on app start
+auth = localStorage.getItem('auth')    
+if (auth) {
+    axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${auth}`;
+}
+
 module.exports = axiosInstance;
 module.exports.axios = axiosInstance;
 
@@ -19,5 +25,10 @@ module.exports.login = function (email, password) {
 }
 
 module.exports.setToken = function (token) {
+    localStorage.setItem('auth', token);
     axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+}
+
+module.exports.updateTwitchToken = async function(token) {
+    return axiosInstance.post('/updateTwitchToken', { token });
 }

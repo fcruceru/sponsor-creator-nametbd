@@ -3,3 +3,4 @@ sqldiff.exe
 sqlite.db
 sqlite3.exe
 sqlite3_analyzer.exe
+.env

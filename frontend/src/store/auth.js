@@ -21,6 +21,9 @@ export default {
         logout(state) {
             state.user = null;
             state.loggedIn = false;
+        },
+        updateUser(state, user) {
+            state.user = user;
         }
     },
     actions: {
@@ -35,7 +38,7 @@ export default {
             return api.login(user.email, user.password).then((res) => {
                 context.commit("login", res.data.user);
                 api.setToken(res.data.token);
-                return res.data
+                return res.data;
             }).catch((error) => {
                 console.log(error)
                 if (error.response.data.reason) {
@@ -45,6 +48,10 @@ export default {
         },
         logout(context) {
             context.commit("logout");
+        },
+        async setTwitchToken(context, token) {
+            let updatedUser = await api.updateTwitchToken(token);
+            context.commit("updateUser", updatedUser.data);
         }
     }
 }

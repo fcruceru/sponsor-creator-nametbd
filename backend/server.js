@@ -73,6 +73,30 @@ app.post('/login', async (req, res) => {
     }
 });
 
+app.post('/updateTwitchToken', async (req, res) => {
+    let user = await auth.getUserFromRequest(req);
+    if (!user) {
+        return res.status(401).send();
+    }
+
+    try {
+        await dao.updateTwitchToken(user, req.body.token);
+        let updatedUser = await dao.getUserById(user.ID);
+        return res.status(200).send(updatedUser);
+    } catch (error) {
+        return res.status(500).send("Error: \n" + error.message,)
+    }
+});
+
+app.get('/users/:id', function (req, res) {
+    try {
+        let user = dao.getUserById(req.params.id);
+        return res.send(user);
+    } catch (error) {
+        return res.status(500).send("Error: \n" + error.message,)
+    }
+})
+
 
 app.listen(port, () => {
     console.log(`Listening on port ${port}`)

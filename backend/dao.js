@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 
 module.exports.resetDb = function () {
     this.deleteDb();
-    db.exec("CREATE TABLE IF NOT EXISTS user(ID INTEGER PRIMARY KEY, username varchar(50), email varchar(50), first_name varchar(50), last_name varchar(50), password CHAR(60), country varchar(50), date_of_birth date) ");
+    db.exec("CREATE TABLE IF NOT EXISTS user(ID INTEGER PRIMARY KEY, username varchar(50), email varchar(50), first_name varchar(50), last_name varchar(50), password CHAR(60), country varchar(50), date_of_birth date, twitch_token varchar(100)) ");
 }
 
 module.exports.deleteDb = function () {
@@ -43,4 +43,8 @@ module.exports.getUserById = function(id) {
 module.exports.getUserByEmail = function(email) {
     let stmt = db.prepare("SELECT * FROM user WHERE email = ?");
     return stmt.get(email);
+}
+
+module.exports.updateTwitchToken = function(user, token) {
+    return db.prepare("UPDATE user SET twitch_token = ? WHERE id = ?").run(token, user.ID);
 }
