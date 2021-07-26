@@ -22,6 +22,14 @@ export default {
     loggedIn() {
       return this.$store.getters["auth/loggedIn"];
     }
+  },
+  mounted() {
+    // Twitch redirect ghetto fix
+    if (window.location.href.indexOf('code') > -1 && !this.$route.query.code){
+      let url = window.location.href.substring(0, window.location.href.length - 2)
+      let code = url.slice(url.indexOf("?code=")+6, url.length)
+      window.location = `http://localhost:8080/#/?code=${code}`
+    }
   }
 }
 </script>
