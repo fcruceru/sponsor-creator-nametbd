@@ -1,6 +1,6 @@
-import Vue from 'vue';
-const axios = require('axios');
-const api = require('../../utils/api');
+import Vue from "vue";
+const axios = require("axios");
+const api = require("../../utils/api");
 import { router } from "../router";
 
 export default {
@@ -10,8 +10,8 @@ export default {
         user: null
     },
     getters: {
-        user: (state) => state.user,
-        loggedIn: (state) => state.loggedIn
+        user: state => state.user,
+        loggedIn: state => state.loggedIn
     },
     mutations: {
         login(state, user) {
@@ -28,23 +28,37 @@ export default {
     },
     actions: {
         register(context, user) {
-            return api.registerUser(user.username, user.email, user.firstName, user.lastName, user.password, user.country, user.dateOfBirth).then((res) => {
-                if (res.status == 201) { // Successfully created
-                    context.commit('login', res.data); // Login user with returned data
-                }
-            })
+            return api
+                .registerUser(
+                    user.username,
+                    user.email,
+                    user.firstName,
+                    user.lastName,
+                    user.password,
+                    user.country,
+                    user.dateOfBirth
+                )
+                .then(res => {
+                    if (res.status == 201) {
+                        // Successfully created
+                        context.commit("login", res.data); // Login user with returned data
+                    }
+                });
         },
         login(context, user) {
-            return api.login(user.email, user.password).then((res) => {
-                context.commit("login", res.data.user);
-                api.setToken(res.data.token);
-                return res.data;
-            }).catch((error) => {
-                console.log(error)
-                if (error.response.data.reason) {
-                    Vue.swal('Error', error.response.data.reason, 'error');
-                }
-            })
+            return api
+                .login(user.email, user.password)
+                .then(res => {
+                    context.commit("login", res.data.user);
+                    api.setToken(res.data.token);
+                    return res.data;
+                })
+                .catch(error => {
+                    console.log(error);
+                    if (error.response.data.reason) {
+                        Vue.swal("Error", error.response.data.reason, "error");
+                    }
+                });
         },
         logout(context) {
             context.commit("logout");
@@ -54,4 +68,4 @@ export default {
             context.commit("updateUser", updatedUser.data);
         }
     }
-}
+};

@@ -1,5 +1,5 @@
-const jwt = require('jsonwebtoken');
-const dao = require('../dao');
+const jwt = require("jsonwebtoken");
+const dao = require("../dao");
 
 // TODO: Look into writing this better
 let Auth;
@@ -13,7 +13,7 @@ Auth.generateJwtToken = async function (user) {
             id: user.ID
         };
 
-        token = jwt.sign(payload, Buffer.from(process.env.JWT_SECRET_BASE64, 'base64'), {
+        token = jwt.sign(payload, Buffer.from(process.env.JWT_SECRET_BASE64, "base64"), {
             expiresIn: "7d"
         });
     } catch (error) {
@@ -21,15 +21,17 @@ Auth.generateJwtToken = async function (user) {
     }
 
     return token;
-}
+};
 
-Auth.verifyToken = async (token) => jwt.verify(token, Buffer.from(process.env.JWT_SECRET_BASE64, 'base64'));
+Auth.verifyToken = async (token) => jwt.verify(token, Buffer.from(process.env.JWT_SECRET_BASE64, "base64"));
 
 Auth.getUserFromRequest = async function (req) {
-    let token = req.headers['authorization'] || req.headers['Authorization'];
-    if (!token) {return null;}
+    let token = req.headers["authorization"] || req.headers["Authorization"];
+    if (!token) {
+        return null;
+    }
 
-    token = token.replace("Bearer ", '');
+    token = token.replace("Bearer ", "");
     let user;
     try {
         let data = await Auth.verifyToken(token);
@@ -39,4 +41,4 @@ Auth.getUserFromRequest = async function (req) {
     }
 
     return user;
-}
+};

@@ -9,7 +9,7 @@ const schema = {
     country: null,
     dateOfBirth: null,
     twitchToken: null
-}
+};
 
 const User = function (data) {
     let User = JSON.parse(JSON.stringify(schema));
@@ -18,7 +18,7 @@ const User = function (data) {
     for (let key of Object.keys(schema)) {
         this[key] = data[key];
     }
-}
+};
 
 // User.prototype.updateTwitchToken = function(token) {
 //     let updatedUser = db.updateTwitchToken(token);
