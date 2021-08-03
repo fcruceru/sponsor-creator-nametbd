@@ -44,6 +44,7 @@ module.exports.getUserById = function (id) {
     let stmt = db.prepare("SELECT * FROM user WHERE id = ?");
     let data = stmt.get(id);
     data.twitch_token = JSON.parse(data.twitch_token);
+    data.twitch_metrics = JSON.parse(data.twitch_metrics);
     
     return new User(data);
 };

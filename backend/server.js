@@ -115,7 +115,7 @@ app.get("/twitch-metrics", async (req, res) => {
     // Multiple step process to get all the metrics from Twitch
     // More steps will be implemented as development progresses
 
-    // Get broadcasterId and username
+    // BroadcasterId and username
     let channelInformation = {};
     try {
         let response = (await axios.get(`https://api.twitch.tv/helix/users`, {
@@ -127,10 +127,10 @@ app.get("/twitch-metrics", async (req, res) => {
         channelInformation = {...response};
     } catch (error) {
         console.error(error.response.data);
-        return res.status(500).send("Error: \n" + error.message);
+        return res.status(500).send("Error: \n" + error.response.data.message);
     }
 
-    // Get channel information
+    // Basic channel information
     try {
         let response = (await axios.get(`https://api.twitch.tv/helix/channels?broadcaster_id=${channelInformation.id}`, {
             headers: {
@@ -141,7 +141,36 @@ app.get("/twitch-metrics", async (req, res) => {
         channelInformation = {...channelInformation,...response};
     } catch (error) {
         console.error(error.response.data);
-        return res.status(500).send("Error: \n" + error.message);
+        return res.status(500).send("Error: \n" + error.response.data.message);
+    }
+
+    // Follows
+    try {
+        let response = (await axios.get(`https://api.twitch.tv/helix/users/follows?to_id=${channelInformation.id}`, {
+            headers: {
+                Authorization: "Bearer " + user.twitch_token.access_token,
+                "Client-Id": process.env.TWITCH_CLIENT_ID
+            }
+        })).data;
+        channelInformation.total_follows = response.total;
+    } catch (error) {
+        console.error(error.response.data);
+        return res.status(500).send("Error: \n" + error.response.data.message);
+    }
+
+    // Subs
+    // TODO: This will error out if the user is not a partner/affiliate
+    try {
+        let response = (await axios.get(`https://api.twitch.tv/helix/subscriptions?broadcaster_id=${channelInformation.id}`, {
+            headers: {
+                Authorization: "Bearer " + user.twitch_token.access_token,
+                "Client-Id": process.env.TWITCH_CLIENT_ID
+            }
+        })).data;
+        channelInformation.total_follows = response.total;
+    } catch (error) {
+        console.error(error.response.data);
+        //return res.status(500).send("Error: \n" + error.response.data.message);
     }
 
     // Save to user model
