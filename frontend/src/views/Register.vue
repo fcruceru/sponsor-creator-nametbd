@@ -29,7 +29,7 @@
             <b-form-group id="input-group-firstName" label="First Name:" label-for="input-firstName">
                 <b-form-input
                     id="input-firstName"
-                    v-model="form.firstName"
+                    v-model="form.first_name"
                     placeholder="Enter first name"
                     required
                 ></b-form-input>
@@ -38,7 +38,7 @@
             <b-form-group id="input-group-lastName" label="Last Name:" label-for="input-lastName">
                 <b-form-input
                     id="input-lastName"
-                    v-model="form.lastName"
+                    v-model="form.last_name"
                     placeholder="Enter last name"
                     required
                 ></b-form-input>
@@ -51,7 +51,7 @@
             <b-form-group id="input-group-dateOfBirth" label="Date Of Birth:" label-for="input-dateOfBirth">
                 <b-form-datepicker
                     id="input-dateOfBirth"
-                    v-model="form.dateOfBirth"
+                    v-model="form.date_of_birth"
                     class="mb-2"
                     required
                 ></b-form-datepicker>
@@ -98,10 +98,10 @@ export default {
             form: {
                 username: null,
                 email: null,
-                firstName: null,
-                lastName: null,
+                first_name: null,
+                last_name: null,
                 country: null,
-                dateOfBirth: null,
+                date_of_birth: null,
                 password: null,
                 passwordConfirm: null
             }

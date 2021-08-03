@@ -34,7 +34,7 @@ app.get("/resetDb", (req, res) => {
 app.post("/register", async (req, res) => {
     try {
         let newUserId = await dao.addUser(req.body);
-        let newUser = await dao.getUserById(newUserId);
+        let newUser = dao.getUserById(newUserId);
         return res.status(201).send(newUser); // Status 201 = created
     } catch (error) {
         return res.status(500).send("Error: \n" + error.message);
@@ -44,7 +44,7 @@ app.post("/register", async (req, res) => {
 app.post("/login", async (req, res) => {
     try {
         // Check user exists
-        let user = await dao.getUserByEmail(req.body.email);
+        let user = dao.getUserByEmail(req.body.email);
         if (!user) {
             return res.status(401).send({
                 success: false,
@@ -98,11 +98,55 @@ app.post("/updateTwitchToken", async (req, res) => {
 
     try {
         await dao.updateTwitchToken(user, data);
-        let updatedUser = await dao.getUserById(user.ID);
+        let updatedUser = dao.getUserById(user.ID);
         return res.status(200).send(updatedUser);
     } catch (error) {
         return res.status(500).send("Error: \n" + error.message);
     }
+});
+
+app.get("/twitch-metrics", async (req, res) => {
+    let user = await auth.getUserFromRequest(req);
+    if (!user) {
+        return res.status(401).send();
+    }
+    // TODO: Check action token exists
+    
+    // Multiple step process to get all the metrics from Twitch
+    // More steps will be implemented as development progresses
+
+    // Get broadcasterId and username
+    let channelInformation = {};
+    try {
+        let response = (await axios.get(`https://api.twitch.tv/helix/users`, {
+            headers: {
+                Authorization: "Bearer " + user.twitch_token.access_token,
+                "Client-Id": process.env.TWITCH_CLIENT_ID
+            }
+        })).data.data[0];
+        channelInformation = {...response};
+    } catch (error) {
+        console.error(error.response.data);
+        return res.status(500).send("Error: \n" + error.message);
+    }
+
+    // Get channel information
+    try {
+        let response = (await axios.get(`https://api.twitch.tv/helix/channels?broadcaster_id=${channelInformation.id}`, {
+            headers: {
+                Authorization: "Bearer " + user.twitch_token.access_token,
+                "Client-Id": process.env.TWITCH_CLIENT_ID
+            }
+        })).data.data[0];
+        channelInformation = {...channelInformation,...response};
+    } catch (error) {
+        console.error(error.response.data);
+        return res.status(500).send("Error: \n" + error.message);
+    }
+
+    // Save to user model
+    dao.updateTwitchMetrics(user, channelInformation);
+    return res.send(channelInformation);
 });
 
 app.get("/users/:id", function (req, res) {

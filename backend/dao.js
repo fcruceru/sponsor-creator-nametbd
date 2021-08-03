@@ -4,8 +4,9 @@ const bcrypt = require("bcrypt");
 
 module.exports.resetDb = function () {
     this.deleteDb();
+    // TODO: Change twitch metrics to individual properties
     db.exec(
-        "CREATE TABLE IF NOT EXISTS user(ID INTEGER PRIMARY KEY, username varchar(50), email varchar(50), first_name varchar(50), last_name varchar(50), password CHAR(60), country varchar(50), date_of_birth date, twitch_token varchar(100)) "
+        "CREATE TABLE IF NOT EXISTS user(ID INTEGER PRIMARY KEY, username varchar(50), email varchar(50), first_name varchar(50), last_name varchar(50), password CHAR(60), country varchar(50), date_of_birth text, twitch_token text, twitch_metrics text) "
     );
 };
 
@@ -29,11 +30,11 @@ module.exports.addUser = async function (data) {
     let info = stmt.run({
         username: user.username,
         email: user.email,
-        first_name: user.firstName,
-        last_name: user.lastName,
+        first_name: user.first_name,
+        last_name: user.last_name,
         password: user.password,
         country: user.country,
-        date_of_birth: user.dateOfBirth
+        date_of_birth: user.date_of_birth
     });
 
     return info.lastInsertRowid;
@@ -41,7 +42,10 @@ module.exports.addUser = async function (data) {
 
 module.exports.getUserById = function (id) {
     let stmt = db.prepare("SELECT * FROM user WHERE id = ?");
-    return stmt.get(id);
+    let data = stmt.get(id);
+    data.twitch_token = JSON.parse(data.twitch_token);
+    
+    return new User(data);
 };
 
 module.exports.getUserByEmail = function (email) {
@@ -50,5 +54,9 @@ module.exports.getUserByEmail = function (email) {
 };
 
 module.exports.updateTwitchToken = function (user, token) {
-    return db.prepare("UPDATE user SET twitch_token = ? WHERE id = ?").run(token, user.ID);
+    return db.prepare("UPDATE user SET twitch_token = ? WHERE id = ?").run(JSON.stringify(token), user.ID);
+};
+
+module.exports.updateTwitchMetrics = function (user, metrics) {
+    return db.prepare("UPDATE user SET twitch_metrics = ? WHERE id = ?").run(JSON.stringify(metrics), user.ID);
 };

@@ -1,14 +1,16 @@
 const db = require("../dao");
 
 const schema = {
+    ID: -1,
     username: null,
     email: null,
-    firstName: null,
-    lastName: null,
+    first_name: null,
+    last_name: null,
     password: null,
     country: null,
-    dateOfBirth: null,
-    twitchToken: null
+    date_of_birth: null,
+    twitch_token: null,
+    twitch_metrics: null
 };
 
 const User = function (data) {
@@ -16,7 +18,7 @@ const User = function (data) {
 
     // Adding only allowed properties
     for (let key of Object.keys(schema)) {
-        this[key] = data[key];
+        this[key] = data[key] || User[key];
     }
 };
 

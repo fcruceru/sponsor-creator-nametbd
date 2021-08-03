@@ -30,11 +30,10 @@ export default {
             let code = url.slice(url.indexOf("?code=") + 6, url.length);
             window.location = `http://localhost:8080/#/?code=${code}`;
         }
-        console.log(this.$route.query.code);
-        // if(this.$route.query.code) {
-        //   this.$store.dispatch("auth/setTwitchToken", this.$route.query.code);
-        //   this.$router.push("/"); // Removing token from URL
-        // }
+        if(this.$route.query.code) {
+          this.$store.dispatch("auth/setTwitchToken", this.$route.query.code);
+          this.$router.push("/"); // Removing token from URL
+        }
     }
 };
 </script>

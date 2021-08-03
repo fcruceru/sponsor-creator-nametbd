@@ -32,11 +32,11 @@ export default {
                 .registerUser(
                     user.username,
                     user.email,
-                    user.firstName,
-                    user.lastName,
+                    user.first_name,
+                    user.last_name,
                     user.password,
                     user.country,
-                    user.dateOfBirth
+                    user.date_of_birth
                 )
                 .then(res => {
                     if (res.status == 201) {

@@ -16,8 +16,8 @@ if (auth) {
 module.exports = axiosInstance;
 module.exports.axios = axiosInstance;
 
-module.exports.registerUser = function(username, email, firstName, lastName, password, country, dateOfBirth) {
-    return axiosInstance.post("/register?", { username, email, firstName, lastName, password, country, dateOfBirth });
+module.exports.registerUser = function(username, email, first_name, last_name, password, country, date_of_birth) {
+    return axiosInstance.post("/register?", { username, email, first_name, last_name, password, country, date_of_birth });
 };
 
 module.exports.login = function(email, password) {
