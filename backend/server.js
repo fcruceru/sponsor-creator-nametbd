@@ -111,20 +111,22 @@ app.get("/twitch-metrics", async (req, res) => {
         return res.status(401).send();
     }
     // TODO: Check action token exists
-    
+
     // Multiple step process to get all the metrics from Twitch
     // More steps will be implemented as development progresses
 
     // BroadcasterId and username
     let channelInformation = {};
     try {
-        let response = (await axios.get(`https://api.twitch.tv/helix/users`, {
-            headers: {
-                Authorization: "Bearer " + user.twitch_token.access_token,
-                "Client-Id": process.env.TWITCH_CLIENT_ID
-            }
-        })).data.data[0];
-        channelInformation = {...response};
+        let response = (
+            await axios.get(`https://api.twitch.tv/helix/users`, {
+                headers: {
+                    "Authorization": "Bearer " + user.twitch_token.access_token,
+                    "Client-Id": process.env.TWITCH_CLIENT_ID
+                }
+            })
+        ).data.data[0];
+        channelInformation = { ...response };
     } catch (error) {
         console.error(error.response.data);
         return res.status(500).send("Error: \n" + error.response.data.message);
@@ -132,13 +134,15 @@ app.get("/twitch-metrics", async (req, res) => {
 
     // Basic channel information
     try {
-        let response = (await axios.get(`https://api.twitch.tv/helix/channels?broadcaster_id=${channelInformation.id}`, {
-            headers: {
-                Authorization: "Bearer " + user.twitch_token.access_token,
-                "Client-Id": process.env.TWITCH_CLIENT_ID
-            }
-        })).data.data[0];
-        channelInformation = {...channelInformation,...response};
+        let response = (
+            await axios.get(`https://api.twitch.tv/helix/channels?broadcaster_id=${channelInformation.id}`, {
+                headers: {
+                    "Authorization": "Bearer " + user.twitch_token.access_token,
+                    "Client-Id": process.env.TWITCH_CLIENT_ID
+                }
+            })
+        ).data.data[0];
+        channelInformation = { ...channelInformation, ...response };
     } catch (error) {
         console.error(error.response.data);
         return res.status(500).send("Error: \n" + error.response.data.message);
@@ -146,12 +150,14 @@ app.get("/twitch-metrics", async (req, res) => {
 
     // Follows
     try {
-        let response = (await axios.get(`https://api.twitch.tv/helix/users/follows?to_id=${channelInformation.id}`, {
-            headers: {
-                Authorization: "Bearer " + user.twitch_token.access_token,
-                "Client-Id": process.env.TWITCH_CLIENT_ID
-            }
-        })).data;
+        let response = (
+            await axios.get(`https://api.twitch.tv/helix/users/follows?to_id=${channelInformation.id}`, {
+                headers: {
+                    "Authorization": "Bearer " + user.twitch_token.access_token,
+                    "Client-Id": process.env.TWITCH_CLIENT_ID
+                }
+            })
+        ).data;
         channelInformation.total_follows = response.total;
     } catch (error) {
         console.error(error.response.data);
@@ -161,13 +167,15 @@ app.get("/twitch-metrics", async (req, res) => {
     // Subs
     // TODO: This will error out if the user is not a partner/affiliate
     try {
-        let response = (await axios.get(`https://api.twitch.tv/helix/subscriptions?broadcaster_id=${channelInformation.id}`, {
-            headers: {
-                Authorization: "Bearer " + user.twitch_token.access_token,
-                "Client-Id": process.env.TWITCH_CLIENT_ID
-            }
-        })).data;
-        channelInformation.total_follows = response.total;
+        let response = (
+            await axios.get(`https://api.twitch.tv/helix/subscriptions?broadcaster_id=${channelInformation.id}`, {
+                headers: {
+                    "Authorization": "Bearer " + user.twitch_token.access_token,
+                    "Client-Id": process.env.TWITCH_CLIENT_ID
+                }
+            })
+        ).data;
+        channelInformation.total_subs = response.total;
     } catch (error) {
         console.error(error.response.data);
         //return res.status(500).send("Error: \n" + error.response.data.message);

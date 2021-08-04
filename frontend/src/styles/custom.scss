@@ -1,0 +1,9 @@
+$twitch: #6441a5;
+$youtube: #FF0000;
+
+$theme-colors: (
+  "twitch":  $twitch,
+  "youtube": $youtube
+);
+
+@import 'node_modules/bootstrap/scss/bootstrap'
