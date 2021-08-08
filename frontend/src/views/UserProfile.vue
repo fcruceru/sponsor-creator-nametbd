@@ -17,7 +17,7 @@
                 </b-col>
                 <!-- Youtube -->
                 <b-col class="bg-youtube-custom">
-                    <h2>Youtube Metrics</h2>
+                    <h2>Youtube Metrics (TODO)</h2>
                     <div v-if="user.twitch_metrics">
                         <h5>Connect your Youtube account.</h5>
                         <b-button variant="outline-youtube" @click="linkTwitch">Connect Youtube</b-button>

@@ -1,27 +1,15 @@
 <template>
     <div id="app">
-        <div id="nav">
-            <router-link to="/">Home | </router-link>
-            <router-link v-if="!loggedIn" to="/register">Register | </router-link>
-            <router-link v-else to="/user-profile">User Profile | </router-link>
-            <router-link v-if="!loggedIn" to="/login">Login</router-link>
-            <a v-else @click="logout" style="cursor: pointer; color: #42b983">Logout</a>
-        </div>
+        <Header/>
         <router-view />
     </div>
 </template>
 
 <script>
+import Header from "@/components/Header";
 export default {
-    methods: {
-        logout() {
-            this.$store.dispatch("auth/logout");
-        }
-    },
-    computed: {
-        loggedIn() {
-            return this.$store.getters["auth/loggedIn"];
-        }
+    components: {
+        Header
     },
     mounted() {
         // Twitch redirect ghetto fix
@@ -50,20 +38,9 @@ export default {
     text-align: center;
     color: #2c3e50;
 }
-body {
-    //background-color: #232323;
-}
 
-#nav {
-    padding: 30px;
 
-    a {
-        font-weight: bold;
-        color: #2c3e50;
-
-        &.router-link-exact-active {
-            color: #42b983;
-        }
-    }
+body{
+    background-color: #232323;
 }
 </style>

@@ -51,7 +51,11 @@ module.exports.getUserById = function (id) {
 
 module.exports.getUserByEmail = function (email) {
     let stmt = db.prepare("SELECT * FROM user WHERE email = ?");
-    return stmt.get(email);
+    let data = stmt.get(email);
+    data.twitch_token = JSON.parse(data.twitch_token);
+    data.twitch_metrics = JSON.parse(data.twitch_metrics);
+    
+    return new User(data);
 };
 
 module.exports.updateTwitchToken = function (user, token) {
