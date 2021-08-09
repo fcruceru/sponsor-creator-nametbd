@@ -6,7 +6,7 @@ module.exports.resetDb = function () {
     this.deleteDb();
     // TODO: Change twitch metrics to individual properties
     db.exec(
-        "CREATE TABLE IF NOT EXISTS user(ID INTEGER PRIMARY KEY, username varchar(50), email varchar(50), first_name varchar(50), last_name varchar(50), password CHAR(60), country varchar(50), date_of_birth text, twitch_token text, twitch_metrics text) "
+        "CREATE TABLE IF NOT EXISTS user(ID INTEGER PRIMARY KEY, username varchar(50), email varchar(50), first_name varchar(50), last_name varchar(50), password CHAR(60), country varchar(50), date_of_birth text, twitch_token text, twitch_metrics text, rank text, state text) "
     );
 };
 
@@ -25,7 +25,7 @@ module.exports.addUser = async function (data) {
 
     // Inserting
     let stmt = db.prepare(
-        "INSERT INTO user(username, email, first_name, last_name, password, country, date_of_birth) VALUES(@username, @email, @first_name, @last_name, @password, @country, @date_of_birth)"
+        "INSERT INTO user(username, email, first_name, last_name, password, country, date_of_birth, rank, state) VALUES(@username, @email, @first_name, @last_name, @password, @country, @date_of_birth, @rank, @state)"
     );
     let info = stmt.run({
         username: user.username,
@@ -34,7 +34,9 @@ module.exports.addUser = async function (data) {
         last_name: user.last_name,
         password: user.password,
         country: user.country,
-        date_of_birth: user.date_of_birth
+        date_of_birth: user.date_of_birth,
+        rank: User.USER_RANKS.CREATOR,
+        state: User.USER_STATES.ACTIVE
     });
 
     return info.lastInsertRowid;

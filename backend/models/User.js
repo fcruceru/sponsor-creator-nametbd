@@ -1,5 +1,21 @@
 const db = require("../dao");
 
+const USER_RANKS = {
+    "CREATOR": "CREATOR",
+    "SPONSOR": "SPONSOR",
+    "ADMIN": "ADMIN",
+
+    "UNKNOWN": "UNKNOWN"
+};
+
+const USER_STATES = {
+    "ACTIVE": "ACTIVE",
+    "PENDING_APPROVAL": "PENDING_APPROVAL",
+    "BANNED": "BANNED",
+
+    "UNKNOWN": "UNKNOWN"
+};
+
 const schema = {
     ID: -1,
     username: null,
@@ -9,6 +25,8 @@ const schema = {
     password: null,
     country: null,
     date_of_birth: null,
+    rank: USER_RANKS.UNKNOWN,
+    state: USER_STATES.UNKNOWN,
     twitch_token: null,
     twitch_metrics: null
 };
@@ -28,5 +46,8 @@ const User = function (data) {
 
 //     return this;
 // }
+
+User.prototype.USER_RANKS = User.USER_RANKS = USER_RANKS;
+User.prototype.USER_STATES = User.USER_STATES = USER_STATES;
 
 module.exports = User;
