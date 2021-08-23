@@ -6,7 +6,7 @@ module.exports.resetDb = function () {
     this.deleteDb();
     // TODO: Change twitch metrics to individual properties
     db.exec(
-        "CREATE TABLE IF NOT EXISTS user(ID INTEGER PRIMARY KEY, username varchar(50), email varchar(50), first_name varchar(50), last_name varchar(50), password CHAR(60), country varchar(50), date_of_birth text, twitch_token text, twitch_metrics text, rank text, state text) "
+        "CREATE TABLE IF NOT EXISTS user(ID INTEGER PRIMARY KEY, username varchar(50), email varchar(50), first_name varchar(50), last_name varchar(50), password CHAR(60), country varchar(50), date_of_birth text, twitch_token text, twitch_metrics text, rank text, state text, product_name text, phone_number text) "
     );
 };
 
@@ -25,7 +25,7 @@ module.exports.addUser = async function (data) {
 
     // Inserting
     let stmt = db.prepare(
-        "INSERT INTO user(username, email, first_name, last_name, password, country, date_of_birth, rank, state) VALUES(@username, @email, @first_name, @last_name, @password, @country, @date_of_birth, @rank, @state)"
+        "INSERT INTO user(username, email, first_name, last_name, password, country, date_of_birth, rank, state, product_name, phone_number) VALUES(@username, @email, @first_name, @last_name, @password, @country, @date_of_birth, @rank, @state, @product_name, @phone_number)"
     );
     let info = stmt.run({
         username: user.username,
@@ -35,8 +35,10 @@ module.exports.addUser = async function (data) {
         password: user.password,
         country: user.country,
         date_of_birth: user.date_of_birth,
-        rank: User.USER_RANKS.CREATOR,
-        state: User.USER_STATES.ACTIVE
+        rank: user.rank,
+        state: user.state,
+        product_name: user.product_name,
+        phone_number: user.phone_number
     });
 
     return info.lastInsertRowid;
@@ -47,7 +49,7 @@ module.exports.getUserById = function (id) {
     let data = stmt.get(id);
     data.twitch_token = JSON.parse(data.twitch_token);
     data.twitch_metrics = JSON.parse(data.twitch_metrics);
-    
+
     return new User(data);
 };
 
@@ -56,7 +58,7 @@ module.exports.getUserByEmail = function (email) {
     let data = stmt.get(email);
     data.twitch_token = JSON.parse(data.twitch_token);
     data.twitch_metrics = JSON.parse(data.twitch_metrics);
-    
+
     return new User(data);
 };
 

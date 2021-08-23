@@ -110,7 +110,7 @@ export default {
     methods: {
         register(event) {
             event.preventDefault();
-            this.$store.dispatch("auth/register", this.form).then((res) => {
+            this.$store.dispatch("auth/registerCreator", this.form).then((res) => {
                 this.$router.push("/"); // Redirect to homepage
             });
         }

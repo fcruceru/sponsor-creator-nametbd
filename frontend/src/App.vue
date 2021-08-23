@@ -13,14 +13,19 @@ export default {
     },
     mounted() {
         // Twitch redirect ghetto fix
-        if (window.location.href.indexOf("code") > -1 && !this.$route.query.code) {
+        if (window.location.href.indexOf('code') > -1 && !this.$route.query.code) {
             let url = window.location.href.substring(0, window.location.href.length - 2);
             let code = url.slice(url.indexOf("?code=") + 6, url.length);
-            window.location = `http://localhost:8080/#/?code=${code}`;
+            console.log("entered first")
+            //window.location = `http://localhost:8080/#/?code=${code}`;
+            //this.$router.push({path: `http://localhost:8080/#/?code=${code}`})
+            this.$router.replace({ path: '/', query: { code: code } })
         }
+        console.log(this.$route.query)
         if (this.$route.query.code) {
-            this.$store.dispatch("auth/setTwitchToken", this.$route.query.code);
-            this.$router.push("/"); // Removing token from URL
+            //this.$store.dispatch("auth/setTwitchToken", this.$route.query.code);
+            console.log("entered second")
+            //this.$router.push("/"); // Removing token from URL
         }
     }
 };
@@ -36,11 +41,11 @@ export default {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
-    color: #2c3e50;
+    //color: #2c3e50;
 }
 
 
 body{
-    background-color: #232323;
+    //background-color: #232323;
 }
 </style>

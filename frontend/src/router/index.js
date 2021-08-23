@@ -10,9 +10,14 @@ const routes = [
         component: () => import("../views/Home.vue")
     },
     {
-        path: "/register",
-        name: "Register",
-        component: () => import("../views/Register.vue")
+        path: "/c-register",
+        name: "CreatorRegister",
+        component: () => import("../views/CreatorRegister.vue")
+    },
+    {
+        path: "/s-register",
+        name: "SponsorRegister",
+        component: () => import("../views/SponsorRegister.vue")
     },
     {
         path: "/user-profile",
@@ -23,6 +28,11 @@ const routes = [
         path: "/login",
         name: "Login",
         component: () => import("../views/Login.vue")
+    },
+    {
+        path: "/admin",
+        name: "Admin",
+        component: () => import("../views/Admin.vue")
     }
 ];
 

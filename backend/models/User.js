@@ -28,7 +28,9 @@ const schema = {
     rank: USER_RANKS.UNKNOWN,
     state: USER_STATES.UNKNOWN,
     twitch_token: null,
-    twitch_metrics: null
+    twitch_metrics: null,
+    product_name: null,
+    phone_number: null
 };
 
 const User = function (data) {

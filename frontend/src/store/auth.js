@@ -2,6 +2,7 @@ import Vue from "vue";
 const axios = require("axios");
 const api = require("../../utils/api");
 import { router } from "../router";
+import Swal from "sweetalert2";
 
 export default {
     namespaced: true,
@@ -27,23 +28,27 @@ export default {
         }
     },
     actions: {
-        register(context, user) {
-            return api
-                .registerUser(
-                    user.username,
-                    user.email,
-                    user.first_name,
-                    user.last_name,
-                    user.password,
-                    user.country,
-                    user.date_of_birth
-                )
-                .then(res => {
-                    if (res.status == 201) {
-                        // Successfully created
-                        context.commit("login", res.data); // Login user with returned data
-                    }
-                });
+        registerCreator(context, user) {
+            user.rank = "CREATOR";
+            user.state = "ACTIVE";
+
+            return api.registerUser(user.username, user.email, user.first_name, user.last_name, user.password, user.country, user.date_of_birth, user.rank, user.state).then(res => {
+                if (res.status == 201) {
+                    // Successfully created
+                    context.commit("login", res.data); // Login user with returned data
+                }
+            });
+        },
+        registerSponsor(context, user) {
+            user.rank = "SPONSOR";
+            user.state = "PENDING_APPROVAL";
+
+            return api.registerUser(user.username, user.email, user.first_name, user.last_name, user.password, user.country, user.date_of_birth, user.rank, user.state, user.product_name, user.phone_number).then(res => {
+                if (res.status == 201) {
+                    // Tell user their request has been submitted and to re-visit this webpage for updates / check their email (?)
+                    Swal.fire("Request submitted!", "Your request will be evaluated and someone will be in contact with you. Please check your email regularly, we should get back to you within 24 hours.", "success");
+                }
+            });
         },
         login(context, user) {
             return api
