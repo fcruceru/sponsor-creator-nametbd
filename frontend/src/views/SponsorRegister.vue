@@ -2,11 +2,11 @@
     <div class="container" style="max-width: 400px">
         <b-form @submit="register">
             <b-form-group id="input-group-firstName" label="First Name:" label-for="input-firstName">
-                <b-form-input id="input-firstName" v-model="form.first_name" placeholder="Enter first name" required></b-form-input>
+                <b-form-input id="input-firstName" v-model="form.first_name" required></b-form-input>
             </b-form-group>
 
             <b-form-group id="input-group-lastName" label="Last Name:" label-for="input-lastName">
-                <b-form-input id="input-lastName" v-model="form.last_name" placeholder="Enter last name" required></b-form-input>
+                <b-form-input id="input-lastName" v-model="form.last_name" required></b-form-input>
             </b-form-group>
 
             <b-form-group
@@ -30,8 +30,8 @@
                 <multiselect v-model="form.products.value" :options="form.products.options" :multiple="true" :close-on-select="false"></multiselect>
             </b-form-group>
 
-            <b-form-group id="input-group-productName" label="Product Name:" label-for="input-productName">
-                <b-form-input id="input-productName" v-model="form.product_name" placeholder="Enter product name" required></b-form-input>
+            <b-form-group id="input-group-companyName" label="Company Name:" label-for="input-companyName">
+                <b-form-input id="input-companyName" v-model="form.company_name" placeholder="Enter company name" required></b-form-input>
             </b-form-group>
 
             <b-form-group id="input-group-phoneNumber" label="Phone Number:">

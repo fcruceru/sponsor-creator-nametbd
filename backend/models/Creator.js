@@ -1,14 +1,11 @@
-const db = require("../dao");
-
-const USER_RANKS = {
-    "CREATOR": "CREATOR",
-    "SPONSOR": "SPONSOR",
+const CREATOR_RANKS = {
+    "NORMAL": "NORMAL", // TODO: Look into renaming this
     "ADMIN": "ADMIN",
 
     "UNKNOWN": "UNKNOWN"
 };
 
-const USER_STATES = {
+const CREATOR_STATES = {
     "ACTIVE": "ACTIVE",
     "PENDING_APPROVAL": "PENDING_APPROVAL",
     "BANNED": "BANNED",
@@ -28,17 +25,15 @@ const schema = {
     rank: USER_RANKS.UNKNOWN,
     state: USER_STATES.UNKNOWN,
     twitch_token: null,
-    twitch_metrics: null,
-    product_name: null,
-    phone_number: null
+    twitch_metrics: null
 };
 
-const User = function (data) {
-    let User = JSON.parse(JSON.stringify(schema));
+const Creator = function (data) {
+    let Creator = JSON.parse(JSON.stringify(schema));
 
     // Adding only allowed properties
     for (let key of Object.keys(schema)) {
-        this[key] = data[key] || User[key];
+        this[key] = data[key] || Creator[key];
     }
 };
 
@@ -49,7 +44,7 @@ const User = function (data) {
 //     return this;
 // }
 
-User.prototype.USER_RANKS = User.USER_RANKS = USER_RANKS;
-User.prototype.USER_STATES = User.USER_STATES = USER_STATES;
+Creator.prototype.CREATOR_RANKS = Creator.CREATOR_RANKS = CREATOR_RANKS;
+Creator.prototype.CREATOR_STATES = Creator.CREATOR_STATES = CREATOR_STATES;
 
-module.exports = User;
+module.exports = Creator;

@@ -1,44 +1,77 @@
 const db = require("better-sqlite3")(__dirname + "/sqlite.db");
-const User = require("./models/User");
+const Creator = require("./models/Creator");
+const Sponsor = require("./models/Sponsor");
 const bcrypt = require("bcrypt");
 
 module.exports.resetDb = function () {
+    // Delete current tables
     this.deleteDb();
-    // TODO: Change twitch metrics to individual properties
+    // Add creator table
     db.exec(
-        "CREATE TABLE IF NOT EXISTS user(ID INTEGER PRIMARY KEY, username varchar(50), email varchar(50), first_name varchar(50), last_name varchar(50), password CHAR(60), country varchar(50), date_of_birth text, twitch_token text, twitch_metrics text, rank text, state text, product_name text, phone_number text) "
+        "CREATE TABLE IF NOT EXISTS creator(ID INTEGER PRIMARY KEY, username varchar(50), email varchar(50), first_name varchar(50), last_name varchar(50), password CHAR(60), country varchar(50), date_of_birth text, twitch_token text, twitch_metrics text, rank text, state text)"
+    );
+    // Add sponsor table
+    db.exec(
+        "CREATE TABLE IF NOT EXISTS creator(ID INTEGER PRIMARY KEY, email varchar(50), first_name varchar(50), last_name varchar(50), password CHAR(60), country varchar(50), state text, company_name varchar(50), products text, phone_number varchar(50))"
     );
 };
 
 module.exports.deleteDb = function () {
-    db.exec("DROP TABLE IF EXISTS user");
+    db.exec("DROP TABLE IF EXISTS creator");
+    db.exec("DROP TABLE IF EXISTS sponsor");
 };
 
-module.exports.addUser = async function (data) {
+module.exports.addCreator = async function (data) {
     // Assuming validation is done beforehand
 
     // Hashing password
-    let user = new User(data);
-    user.password = await bcrypt.hash(user.password, 10);
+    let creator = new Creator(data);
+    creator.password = await bcrypt.hash(creator.password, 10);
 
     // TODO: Check for duplicate username/email
 
     // Inserting
     let stmt = db.prepare(
-        "INSERT INTO user(username, email, first_name, last_name, password, country, date_of_birth, rank, state, product_name, phone_number) VALUES(@username, @email, @first_name, @last_name, @password, @country, @date_of_birth, @rank, @state, @product_name, @phone_number)"
+        "INSERT INTO creator(username, email, first_name, last_name, password, country, date_of_birth, rank, state, product_name, phone_number) VALUES(@username, @email, @first_name, @last_name, @password, @country, @date_of_birth, @rank, @state)"
     );
     let info = stmt.run({
-        username: user.username,
-        email: user.email,
-        first_name: user.first_name,
-        last_name: user.last_name,
-        password: user.password,
-        country: user.country,
-        date_of_birth: user.date_of_birth,
-        rank: user.rank,
-        state: user.state,
-        product_name: user.product_name,
-        phone_number: user.phone_number
+        username: creator.username,
+        email: creator.email,
+        first_name: creator.first_name,
+        last_name: creator.last_name,
+        password: creator.password,
+        country: creator.country,
+        date_of_birth: creator.date_of_birth,
+        rank: creator.rank,
+        state: creator.state
+    });
+
+    return info.lastInsertRowid;
+};
+
+module.exports.addSponsor = async function (data) {
+    // Assuming validation is done beforehand
+
+    // Hashing password
+    let sponsor = new Sponsor(data);
+    sponsor.password = await bcrypt.hash(sponsor.password, 10);
+
+    // TODO: Check for duplicate username/email
+
+    // Inserting
+    let stmt = db.prepare(
+        "INSERT INTO sponsor(email, first_name, last_name, password, country, state, product_name, phone_number) VALUES(@username, @email, @first_name, @last_name, @password, @country, @date_of_birth, @rank, @state, @company_name, @products, @phone_number)"
+    );
+    let info = stmt.run({
+        email: sponsor.email,
+        first_name: sponsor.first_name,
+        last_name: sponsor.last_name,
+        password: sponsor.password,
+        country: sponsor.country,
+        state: sponsor.state,
+        products: sponsor.products,
+        company_name: sponsor.company_name,
+        phone_number: sponsor.phone_number
     });
 
     return info.lastInsertRowid;
