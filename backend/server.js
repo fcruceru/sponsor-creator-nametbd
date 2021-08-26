@@ -33,8 +33,17 @@ app.get("/resetDb", (req, res) => {
 
 app.post("/register", async (req, res) => {
     try {
-        let newUserId = await dao.addUser(req.body);
-        let newUser = dao.getUserById(newUserId);
+        let type = req.query.type;
+        let newUserId;
+        if (type === "creator") {
+            newUserId = await dao.addCreator(req.body);
+        } else if (type === "sponsor") {
+            newUserId = await dao.addSponsor(req.body);
+        } else {
+            return res.status(500).send("Error: Missing user type.");
+        }
+
+        let newUser = dao.getUserById(type, newUserId);
         return res.status(201).send(newUser); // Status 201 = created
     } catch (error) {
         return res.status(500).send("Error: \n" + error.message);
@@ -44,7 +53,7 @@ app.post("/register", async (req, res) => {
 app.post("/login", async (req, res) => {
     try {
         // Check user exists
-        let user = dao.getUserByEmail(req.body.email);
+        let user = dao.getUserByEmail(req.query.type, req.body.email);
         if (!user) {
             return res.status(401).send({
                 success: false,
@@ -59,7 +68,7 @@ app.post("/login", async (req, res) => {
                 reason: "Invalid password entered. Double check you entered the correct password and try again."
             });
         } else {
-            let token = await auth.generateJwtToken(user);
+            let token = await auth.generateJwtToken(user, type);
 
             return res.status(200).send({
                 user,
@@ -121,7 +130,7 @@ app.get("/twitch-metrics", async (req, res) => {
         let response = (
             await axios.get(`https://api.twitch.tv/helix/users`, {
                 headers: {
-                    "Authorization": "Bearer " + user.twitch_token.access_token,
+                    Authorization: "Bearer " + user.twitch_token.access_token,
                     "Client-Id": process.env.TWITCH_CLIENT_ID
                 }
             })
@@ -137,7 +146,7 @@ app.get("/twitch-metrics", async (req, res) => {
         let response = (
             await axios.get(`https://api.twitch.tv/helix/channels?broadcaster_id=${channelInformation.id}`, {
                 headers: {
-                    "Authorization": "Bearer " + user.twitch_token.access_token,
+                    Authorization: "Bearer " + user.twitch_token.access_token,
                     "Client-Id": process.env.TWITCH_CLIENT_ID
                 }
             })
@@ -153,7 +162,7 @@ app.get("/twitch-metrics", async (req, res) => {
         let response = (
             await axios.get(`https://api.twitch.tv/helix/users/follows?to_id=${channelInformation.id}`, {
                 headers: {
-                    "Authorization": "Bearer " + user.twitch_token.access_token,
+                    Authorization: "Bearer " + user.twitch_token.access_token,
                     "Client-Id": process.env.TWITCH_CLIENT_ID
                 }
             })
@@ -170,7 +179,7 @@ app.get("/twitch-metrics", async (req, res) => {
         let response = (
             await axios.get(`https://api.twitch.tv/helix/subscriptions?broadcaster_id=${channelInformation.id}`, {
                 headers: {
-                    "Authorization": "Bearer " + user.twitch_token.access_token,
+                    Authorization: "Bearer " + user.twitch_token.access_token,
                     "Client-Id": process.env.TWITCH_CLIENT_ID
                 }
             })
@@ -188,8 +197,13 @@ app.get("/twitch-metrics", async (req, res) => {
 
 app.get("/users/:id", function (req, res) {
     try {
-        let user = dao.getUserById(req.params.id);
-        return res.send(user);
+        let type = req.query.type;
+        if (type === "creator" || type === "sponsor") {
+            let user = dao.getUserById(type, req.params.id);
+            return res.send(user);
+        } else {
+            return res.status(500).send("Error: Missing user type.");
+        }
     } catch (error) {
         return res.status(500).send("Error: \n" + error.message);
     }

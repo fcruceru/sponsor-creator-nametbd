@@ -32,7 +32,7 @@ module.exports.addCreator = async function (data) {
 
     // Inserting
     let stmt = db.prepare(
-        "INSERT INTO creator(username, email, first_name, last_name, password, country, date_of_birth, rank, state, product_name, phone_number) VALUES(@username, @email, @first_name, @last_name, @password, @country, @date_of_birth, @rank, @state)"
+        "INSERT INTO creator(username, email, first_name, last_name, password, country, date_of_birth, rank, state) VALUES(@username, @email, @first_name, @last_name, @password, @country, @date_of_birth, @rank, @state)"
     );
     let info = stmt.run({
         username: creator.username,
@@ -42,8 +42,8 @@ module.exports.addCreator = async function (data) {
         password: creator.password,
         country: creator.country,
         date_of_birth: creator.date_of_birth,
-        rank: creator.rank,
-        state: creator.state
+        rank: Creator.CREATOR_RANKS.NORMAL,
+        state: Creator.CREATOR_STATES.ACTIVE
     });
 
     return info.lastInsertRowid;
@@ -60,7 +60,7 @@ module.exports.addSponsor = async function (data) {
 
     // Inserting
     let stmt = db.prepare(
-        "INSERT INTO sponsor(email, first_name, last_name, password, country, state, product_name, phone_number) VALUES(@username, @email, @first_name, @last_name, @password, @country, @date_of_birth, @rank, @state, @company_name, @products, @phone_number)"
+        "INSERT INTO sponsor(email, first_name, last_name, password, country, state, products, company_name, phone_number) VALUES(@username, @email, @first_name, @last_name, @password, @country, @date_of_birth, @rank, @state, @company_name, @products, @phone_number)"
     );
     let info = stmt.run({
         email: sponsor.email,
@@ -68,7 +68,7 @@ module.exports.addSponsor = async function (data) {
         last_name: sponsor.last_name,
         password: sponsor.password,
         country: sponsor.country,
-        state: sponsor.state,
+        state: Sponsor.SPONSOR_STATES.PENDING_APPROVAL,
         products: sponsor.products,
         company_name: sponsor.company_name,
         phone_number: sponsor.phone_number
@@ -77,28 +77,40 @@ module.exports.addSponsor = async function (data) {
     return info.lastInsertRowid;
 };
 
-module.exports.getUserById = function (id) {
-    let stmt = db.prepare("SELECT * FROM user WHERE id = ?");
+module.exports.getUserById = function (type, id) {
+    let stmt = db.prepare(`SELECT * FROM ${type} WHERE id = ?`);
     let data = stmt.get(id);
-    data.twitch_token = JSON.parse(data.twitch_token);
-    data.twitch_metrics = JSON.parse(data.twitch_metrics);
 
-    return new User(data);
+    if (type == "creator") {
+        data.twitch_token = JSON.parse(data.twitch_token);
+        data.twitch_metrics = JSON.parse(data.twitch_metrics);
+        return new Creator(data);
+    } else if (type == "sponsor") {
+        return new Sponsor(data);
+    }
+
+    return null;
 };
 
-module.exports.getUserByEmail = function (email) {
-    let stmt = db.prepare("SELECT * FROM user WHERE email = ?");
+module.exports.getUserByEmail = function (type, email) {
+    let stmt = db.prepare(`SELECT * FROM ${type} WHERE email = ?`);
     let data = stmt.get(email);
-    data.twitch_token = JSON.parse(data.twitch_token);
-    data.twitch_metrics = JSON.parse(data.twitch_metrics);
 
-    return new User(data);
+    if (type == "creator") {
+        data.twitch_token = JSON.parse(data.twitch_token);
+        data.twitch_metrics = JSON.parse(data.twitch_metrics);
+        return new Creator(data);
+    } else if (type == "sponsor") {
+        return new Sponsor(data);
+    }
+
+    return null;
 };
 
-module.exports.updateTwitchToken = function (user, token) {
-    return db.prepare("UPDATE user SET twitch_token = ? WHERE id = ?").run(JSON.stringify(token), user.ID);
+module.exports.updateTwitchToken = function (creator, token) {
+    return db.prepare("UPDATE creator SET twitch_token = ? WHERE id = ?").run(JSON.stringify(token), creator.ID);
 };
 
-module.exports.updateTwitchMetrics = function (user, metrics) {
-    return db.prepare("UPDATE user SET twitch_metrics = ? WHERE id = ?").run(JSON.stringify(metrics), user.ID);
+module.exports.updateTwitchMetrics = function (creator, metrics) {
+    return db.prepare("UPDATE creator SET twitch_metrics = ? WHERE id = ?").run(JSON.stringify(metrics), creator.ID);
 };

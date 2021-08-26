@@ -7,7 +7,6 @@ const CREATOR_RANKS = {
 
 const CREATOR_STATES = {
     "ACTIVE": "ACTIVE",
-    "PENDING_APPROVAL": "PENDING_APPROVAL",
     "BANNED": "BANNED",
 
     "UNKNOWN": "UNKNOWN"
@@ -22,8 +21,8 @@ const schema = {
     password: null,
     country: null,
     date_of_birth: null,
-    rank: USER_RANKS.UNKNOWN,
-    state: USER_STATES.UNKNOWN,
+    rank: CREATOR_RANKS.UNKNOWN,
+    state: CREATOR_RANKS.UNKNOWN,
     twitch_token: null,
     twitch_metrics: null
 };

@@ -13,7 +13,7 @@ const schema = {
     last_name: null,
     password: null,
     country: null,
-    state: USER_STATES.UNKNOWN,
+    state: SPONSOR_STATES.UNKNOWN,
     company_name: null,
     products: null, // Comma-delimited string of values
     preferences: null, // Comma-delimited string of values (e.g. "Twitch,Youtube")
