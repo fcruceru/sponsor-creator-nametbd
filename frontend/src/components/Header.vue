@@ -3,7 +3,9 @@
         <router-link to="/">Home | </router-link>
         <router-link v-if="!loggedIn" to="/s-register">Sponsor Register | </router-link>
         <router-link v-else to="/user-profile">User Profile | </router-link>
-        <router-link v-if="!loggedIn" to="/login">Login</router-link>
+        <router-link v-if="!loggedIn" to="/sponsor-login">Sponsor Login | </router-link>
+        <router-link v-if="!loggedIn" to="/c-register">Creator Register | </router-link>
+        <router-link v-if="!loggedIn" to="/creator-login">Creator Login</router-link>
         <a v-else @click="logout" style="cursor: pointer; color: #42b983">Logout</a>
         <router-link v-if="user && user.rank == 'CREATOR'" to="/admin"> | Admin</router-link>
     </div>

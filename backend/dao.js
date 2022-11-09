@@ -12,7 +12,7 @@ module.exports.resetDb = function () {
     );
     // Add sponsor table
     db.exec(
-        "CREATE TABLE IF NOT EXISTS creator(ID INTEGER PRIMARY KEY, email varchar(50), first_name varchar(50), last_name varchar(50), password CHAR(60), country varchar(50), state text, company_name varchar(50), products text, phone_number varchar(50))"
+        "CREATE TABLE IF NOT EXISTS sponsor(ID INTEGER PRIMARY KEY, email varchar(50), first_name varchar(50), last_name varchar(50), password CHAR(60), country varchar(50), state text, company_name varchar(50), products text, phone_number varchar(50))"
     );
 };
 

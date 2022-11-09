@@ -10,11 +10,15 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^0.21.1",
-    "better-sqlite3": "^7.4.1",
+    "better-sqlite3": "^7.6.2",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
-    "node-twitch": "^0.4.5"
+    "node-twitch": "^0.4.5",
+    "bcrypt": "^5.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
   }
 }

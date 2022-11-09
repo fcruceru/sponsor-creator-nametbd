@@ -30,7 +30,7 @@ export default {
     actions: {
         registerCreator(context, creator) {
             return api
-                .registerUser(creator.username, creator.email, creator.first_name, creator.last_name, creator.password, creator.country, creator.date_of_birth)
+                .registerUser("creator", creator.username, creator.email, creator.first_name, creator.last_name, creator.password, creator.country, creator.date_of_birth)
                 .then(res => {
                     if (res.status == 201) {
                         // Successfully created
@@ -41,6 +41,7 @@ export default {
         registerSponsor(context, sponsor) {
             return api
                 .registerUser(
+                    "sponsor",
                     sponsor.username,
                     sponsor.email,
                     sponsor.first_name,
@@ -65,7 +66,7 @@ export default {
         },
         login(context, user) {
             return api
-                .login(user.email, user.password)
+                .login(user.type, user.email, user.password)
                 .then(res => {
                     context.commit("login", res.data.user);
                     api.setToken(res.data.token);

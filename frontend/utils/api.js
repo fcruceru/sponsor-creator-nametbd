@@ -16,12 +16,12 @@ if (auth) {
 module.exports = axiosInstance;
 module.exports.axios = axiosInstance;
 
-module.exports.registerUser = function(username, email, first_name, last_name, password, country, date_of_birth) {
-    return axiosInstance.post("/register?", { username, email, first_name, last_name, password, country, date_of_birth });
+module.exports.registerUser = function(type, username, email, first_name, last_name, password, country, date_of_birth) {
+    return axiosInstance.post("/register?", { username, email, first_name, last_name, password, country, date_of_birth }, { params: { type } });
 };
 
-module.exports.login = function(email, password) {
-    return axiosInstance.post("/login?", { email, password });
+module.exports.login = function(type, email, password) {
+    return axiosInstance.post("/login?", { email, password }, { params: { type } });
 };
 
 module.exports.setToken = function(token) {

@@ -25,9 +25,14 @@ const routes = [
         component: () => import("../views/UserProfile.vue")
     },
     {
-        path: "/login",
-        name: "Login",
-        component: () => import("../views/Login.vue")
+        path: "/creator-login",
+        name: "CreatorLogin",
+        component: () => import("../views/CreatorLogin.vue")
+    },
+    {
+        path: "/sponsor-login",
+        name: "SponsorLogin",
+        component: () => import("../views/SponsorLogin.vue")
     },
     {
         path: "/admin",

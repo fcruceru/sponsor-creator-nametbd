@@ -14,7 +14,7 @@ Auth.generateJwtToken = async function (user, type) {
             type: type
         };
 
-        token = jwt.sign(payload, Buffer.from(process.env.JWT_SECRET_BASE64, "base64"), {
+        token = jwt.sign(payload, Buffer.from("dGVzdF9iYXNlNjQ=", "base64"), { // TODO: Fix env variable
             expiresIn: "7d"
         });
     } catch (error) {
@@ -24,7 +24,7 @@ Auth.generateJwtToken = async function (user, type) {
     return token;
 };
 
-Auth.verifyToken = async (token) => jwt.verify(token, Buffer.from(process.env.JWT_SECRET_BASE64, "base64"));
+Auth.verifyToken = async (token) => jwt.verify(token, Buffer.from("dGVzdF9iYXNlNjQ=", "base64")); // TODO: Fix env variable
 
 Auth.getUserFromRequest = async function (req) {
     let token = req.headers["authorization"] || req.headers["Authorization"];
@@ -36,7 +36,7 @@ Auth.getUserFromRequest = async function (req) {
     let user;
     try {
         let data = await Auth.verifyToken(token);
-        user = dao.getUserById(data.id);
+        user = dao.getUserById(req.query.type, data.id);
     } catch (error) {
         console.error(`Error getting user from JWT:\n${error.name}: ${error.message}`);
     }

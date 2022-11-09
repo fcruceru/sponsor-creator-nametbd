@@ -32,7 +32,8 @@ export default {
         return {
             form: {
                 email: null,
-                password: null
+                password: null,
+                type: "sponsor" // TODO: Remove this
             }
         };
     },
