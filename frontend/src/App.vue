@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-        <Header/>
+        <Header />
         <router-view />
     </div>
 </template>
@@ -13,19 +13,16 @@ export default {
     },
     mounted() {
         // Twitch redirect ghetto fix
-        if (window.location.href.indexOf('code') > -1 && !this.$route.query.code) {
+        if (window.location.href.indexOf("code") > -1) {
             let url = window.location.href.substring(0, window.location.href.length - 2);
-            let code = url.slice(url.indexOf("?code=") + 6, url.length);
-            console.log("entered first")
-            //window.location = `http://localhost:8080/#/?code=${code}`;
+            let code = url.substring(url.indexOf("?code=") + 6, url.indexOf("subscriptions") + 14);
+            console.log(code);
+            window.location = `http://localhost:8080/#/`;
+            this.$store.dispatch("auth/setTwitchToken", code);
+
             //this.$router.push({path: `http://localhost:8080/#/?code=${code}`})
-            this.$router.replace({ path: '/', query: { code: code } })
-        }
-        console.log(this.$route.query)
-        if (this.$route.query.code) {
-            //this.$store.dispatch("auth/setTwitchToken", this.$route.query.code);
-            console.log("entered second")
-            //this.$router.push("/"); // Removing token from URL
+            //window.location = `http://localhost:8080/#/?code=${code}`;
+            //this.$router.replace({ path: "/", query: { code: code } });
         }
     }
 };
@@ -44,8 +41,7 @@ export default {
     //color: #2c3e50;
 }
 
-
-body{
+body {
     //background-color: #232323;
 }
 </style>

@@ -16,8 +16,6 @@ const auth = require("./utils/auth");
 const bcrypt = require("bcrypt");
 const axios = require("axios");
 
-const REDIRECT_URI = "http://localhost:8080";
-
 app.get("/testconn", (req, res) => {
     return res.send("Working Connection");
 });
@@ -92,7 +90,7 @@ app.post("/updateTwitchToken", async (req, res) => {
     try {
         data = (
             await axios.post( // TODO: Create new app on launch (to re-generate clientId)
-            `https://id.twitch.tv/oauth2/token?client_id=${process.env.TWITCH_CLIENT_ID}&client_secret=${process.env.TWITCH_CLIENT_SECRET}&code=${req.body.code}&grant_type=authorization_code&redirect_uri=${REDIRECT_URI}`
+            `https://id.twitch.tv/oauth2/token?client_id=${process.env.TWITCH_CLIENT_ID}&client_secret=${process.env.TWITCH_CLIENT_SECRET}&code=${req.body.code}&grant_type=authorization_code&redirect_uri=${process.env.REDIRECT_URI}`
             )
         ).data;
     } catch (error) {
@@ -108,7 +106,7 @@ app.post("/updateTwitchToken", async (req, res) => {
 
     try {
         await dao.updateTwitchToken(user, data);
-        let updatedUser = dao.getUserById(user.ID);
+        let updatedUser = dao.getUserById("creator", user.ID); // TODO: Clean this up
         return res.status(200).send(updatedUser);
     } catch (error) {
         return res.status(500).send("Error: \n" + error.message);

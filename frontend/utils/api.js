@@ -29,6 +29,6 @@ module.exports.setToken = function(token) {
     axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 };
 
-module.exports.updateTwitchToken = async function(code) {
-    return axiosInstance.post("/updateTwitchToken", { code });
+module.exports.updateTwitchToken = async function(type, code) {
+    return axiosInstance.post("/updateTwitchToken", { code }, { params: { type } });
 };

@@ -30,7 +30,16 @@ export default {
     actions: {
         registerCreator(context, creator) {
             return api
-                .registerUser("creator", creator.username, creator.email, creator.first_name, creator.last_name, creator.password, creator.country, creator.date_of_birth)
+                .registerUser(
+                    "creator",
+                    creator.username,
+                    creator.email,
+                    creator.first_name,
+                    creator.last_name,
+                    creator.password,
+                    creator.country,
+                    creator.date_of_birth
+                )
                 .then(res => {
                     if (res.status == 201) {
                         // Successfully created
@@ -83,7 +92,7 @@ export default {
             context.commit("logout");
         },
         async setTwitchToken(context, token) {
-            let updatedUser = await api.updateTwitchToken(token);
+            let updatedUser = await api.updateTwitchToken("creator", token); // TODO: Clean this up
             context.commit("updateUser", updatedUser.data);
         }
     }
