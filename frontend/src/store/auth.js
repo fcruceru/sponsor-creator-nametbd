@@ -91,9 +91,26 @@ export default {
         logout(context) {
             context.commit("logout");
         },
-        async setTwitchToken(context, token) {
-            let updatedUser = await api.updateTwitchToken("creator", token); // TODO: Clean this up
-            context.commit("updateUser", updatedUser.data);
+        setTwitchToken(context, token) {
+            return api
+                .updateTwitchToken("creator", token)
+                .then(res => {
+                    context.commit("updateUser", res.data);
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+        },
+        updateTwitchMetrics(context) {
+            return api
+                .updateTwitchMetrics("creator")
+                .then(res => {
+                    console.log(res.data);
+                    context.commit("updateUser", res.data);
+                })
+                .catch(error => {
+                    console.log(error);
+                });
         }
     }
 };

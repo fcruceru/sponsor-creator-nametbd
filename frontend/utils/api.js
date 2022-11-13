@@ -32,3 +32,7 @@ module.exports.setToken = function(token) {
 module.exports.updateTwitchToken = async function(type, code) {
     return axiosInstance.post("/updateTwitchToken", { code }, { params: { type } });
 };
+
+module.exports.updateTwitchMetrics = async function(type) {
+    return axiosInstance.post("/updateTwitchMetrics", {}, { params: { type } });
+};

@@ -89,8 +89,9 @@ app.post("/updateTwitchToken", async (req, res) => {
     let data;
     try {
         data = (
-            await axios.post( // TODO: Create new app on launch (to re-generate clientId)
-            `https://id.twitch.tv/oauth2/token?client_id=${process.env.TWITCH_CLIENT_ID}&client_secret=${process.env.TWITCH_CLIENT_SECRET}&code=${req.body.code}&grant_type=authorization_code&redirect_uri=${process.env.REDIRECT_URI}`
+            await axios.post(
+                // TODO: Create new app on launch (to re-generate clientId)
+                `https://id.twitch.tv/oauth2/token?client_id=${process.env.TWITCH_CLIENT_ID}&client_secret=${process.env.TWITCH_CLIENT_SECRET}&code=${req.body.code}&grant_type=authorization_code&redirect_uri=${process.env.REDIRECT_URI}`
             )
         ).data;
     } catch (error) {
@@ -113,7 +114,7 @@ app.post("/updateTwitchToken", async (req, res) => {
     }
 });
 
-app.get("/twitch-metrics", async (req, res) => {
+app.post("/updateTwitchMetrics", async (req, res) => {
     let user = await auth.getUserFromRequest(req);
     if (!user) {
         return res.status(401).send();
@@ -191,7 +192,10 @@ app.get("/twitch-metrics", async (req, res) => {
 
     // Save to user model
     dao.updateTwitchMetrics(user, channelInformation);
-    return res.send(channelInformation);
+
+    // Return user to be updated in vuex store
+    let updatedUser = dao.getUserById("creator", user.ID);
+    return res.send(updatedUser);
 });
 
 app.get("/users/:id", function (req, res) {
