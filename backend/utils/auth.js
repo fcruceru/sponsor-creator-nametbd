@@ -14,7 +14,7 @@ Auth.generateJwtToken = async function (user, type) {
             type: type
         };
 
-        token = jwt.sign(payload, Buffer.from("dGVzdF9iYXNlNjQ=", "base64"), { // TODO: Fix env variable
+        token = jwt.sign(payload, Buffer.from(process.env.JWT_SECRET_BASE64, "base64"), {
             expiresIn: "7d"
         });
     } catch (error) {
@@ -24,8 +24,7 @@ Auth.generateJwtToken = async function (user, type) {
     return token;
 };
 
-Auth.verifyToken = async (token) => jwt.verify(token, Buffer.from("dGVzdF9iYXNlNjQ=", "base64")); // TODO: Fix env variable
-
+Auth.verifyToken = async (token) => jwt.verify(token, Buffer.from(process.env.JWT_SECRET_BASE64, "base64"));
 Auth.getUserFromRequest = async function (req) {
     let token = req.headers["authorization"] || req.headers["Authorization"];
     if (!token) {

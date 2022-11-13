@@ -1,5 +1,5 @@
 // Loading env variables
-require("dotenv").config();
+require("dotenv").config({ path: "backend/.env" });
 
 // Express
 const express = require("express");
@@ -39,7 +39,8 @@ app.post("/register", async (req, res) => {
             newUserId = await dao.addCreator(req.body);
         } else if (type === "sponsor") {
             newUserId = await dao.addSponsor(req.body);
-        } else { // TODO: Change to check for type & general exception
+        } else {
+            // TODO: Change to check for type & general exception
             return res.status(500).send("Error: Missing user type.");
         }
 
@@ -90,8 +91,8 @@ app.post("/updateTwitchToken", async (req, res) => {
     let data;
     try {
         data = (
-            await axios.post(
-                `https://id.twitch.tv/oauth2/token?client_id=2g80sz8mijbs5kpyssub08rp217php&client_secret=lhcrc3nn6yij40ofatgzioxms5z9by&code=${req.body.code}&grant_type=authorization_code&redirect_uri=${REDIRECT_URI}`
+            await axios.post( // TODO: Create new app on launch (to re-generate clientId)
+            `https://id.twitch.tv/oauth2/token?client_id=${process.env.TWITCH_CLIENT_ID}&client_secret=${process.env.TWITCH_CLIENT_SECRET}&code=${req.body.code}&grant_type=authorization_code&redirect_uri=${REDIRECT_URI}`
             )
         ).data;
     } catch (error) {
@@ -201,7 +202,8 @@ app.get("/users/:id", function (req, res) {
         if (type === "creator" || type === "sponsor") {
             let user = dao.getUserById(type, req.params.id);
             return res.send(user);
-        } else { // TODO: Change to check for type & general exception
+        } else {
+            // TODO: Change to check for type & general exception
             return res.status(500).send("Error: Missing user type.");
         }
     } catch (error) {
