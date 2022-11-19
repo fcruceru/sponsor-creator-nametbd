@@ -27,7 +27,7 @@ app.get("/resetDb", (req, res) => {
     } catch (error) {
         return res.status(500).send("Error: \n" + error.message);
     }
-});
+}); 
 
 app.post("/register", async (req, res) => {
     try {
@@ -198,7 +198,13 @@ app.post("/updateTwitchMetrics", async (req, res) => {
     return res.send(updatedUser);
 });
 
-app.get("/users/:id", function (req, res) {
+app.get("/users/:id", async function (req, res) {
+    // TODO: Permissions
+    let user = await auth.getUserFromRequest(req);
+    if (!user) {
+        return res.status(401).send();
+    }
+
     try {
         let type = req.query.type;
         if (type === "creator" || type === "sponsor") {
@@ -208,6 +214,19 @@ app.get("/users/:id", function (req, res) {
             // TODO: Change to check for type & general exception
             return res.status(500).send("Error: Missing user type.");
         }
+    } catch (error) {
+        return res.status(500).send("Error: \n" + error.message);
+    }
+});
+
+app.get("/user", async function (req, res) {
+    // TODO: Permissions
+    try {
+        let user = await auth.getUserFromRequest(req);
+        if (!user) {
+            return res.status(401).send();
+        }
+        return user;
     } catch (error) {
         return res.status(500).send("Error: \n" + error.message);
     }

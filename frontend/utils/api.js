@@ -36,3 +36,11 @@ module.exports.updateTwitchToken = async function(type, code) {
 module.exports.updateTwitchMetrics = async function(type) {
     return axiosInstance.post("/updateTwitchMetrics", {}, { params: { type } });
 };
+
+module.exports.getUser = function(type, id) {
+    return axiosInstance.get(`/users/${id}`, { params: { type } });
+};
+
+module.exports.getUpdatedUser = function(type) {
+    return axiosInstance.get("/user", { params: { type } });
+};

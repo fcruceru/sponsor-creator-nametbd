@@ -18,7 +18,6 @@ export default {
             let code = url.substring(url.indexOf("?code=") + 6, url.indexOf("subscriptions") + 14);
             // TODO: Consider refactoring this
             this.$store.dispatch("auth/setTwitchToken", code).then(() => {
-                // TODO: Fix not updating vuex store
                 this.$store.dispatch("auth/updateTwitchMetrics").then(() => {
                     window.location = `http://localhost:8080/#/`;
                 }); 

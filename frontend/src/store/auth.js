@@ -105,9 +105,20 @@ export default {
             return api
                 .updateTwitchMetrics("creator")
                 .then(res => {
-                    console.log(res.data);
                     context.commit("updateUser", res.data);
                 })
+                .catch(error => {
+                    console.log(error);
+                });
+        },
+        getUpdatedUser(context, type) {
+            return api.getUpdatedUser(type).then(res => {
+                context.commit("updateUser", res.data);
+            });
+        },
+        getUser(context, data) {
+            return api
+                .getUser(data["type"], data["id"])
                 .catch(error => {
                     console.log(error);
                 });
