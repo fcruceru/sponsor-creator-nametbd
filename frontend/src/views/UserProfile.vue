@@ -10,10 +10,19 @@
                         <b-button variant="outline-twitch" @click="linkTwitch">Connect Twitch</b-button>
                     </div>
                     <div v-else>
+                        <p>Connected to Twitch as <a :href="`https://www.twitch.tv/${user.twitch_metrics.display_name}`"><b>{{ user.twitch_metrics.display_name }}</b></a></p>
                         <p>Follow Count: {{ user.twitch_metrics.total_follows }}</p>
-                        <p v-if="user.twitch_metrics.total_subs">Subscriber Count: {{ user.twitch_metrics.total_subs }}</p>
                         <p>Total Views: {{ user.twitch_metrics.view_count }}</p>
+                        <!-- These metrics require a user to be partnered -->
+                        <p v-if="user.twitch_metrics.total_subs">Subscriber Count: {{ user.twitch_metrics.total_subs }}</p>
+                        <p v-if="user.twitch_metrics.total_subs">Total Hours Streamed: {{ Math.ceil(user.twitch_metrics.minutes_streamed / 60) }}</p>
+                        <p v-if="user.twitch_metrics.total_subs">Average Viewer Count: {{ user.twitch_metrics.avg_viewers }}</p>
+                        <p v-if="user.twitch_metrics.total_subs">Highest Viewer Count: {{ user.twitch_metrics.max_viewers }}</p>
+                        <p v-if="user.twitch_metrics.total_subs">Total Hours Watched: {{ user.twitch_metrics.hours_watched }}</p>
+                        <p v-if="user.twitch_metrics.total_subs">Total Views: {{ user.twitch_metrics.views_total }}</p>
                     </div>
+                    <!-- <div>Twitch token: {{ user.twitch_token }}</div>
+                    <div>Twitch metrics: {{ user.twitch_metrics }}</div> -->
                 </b-col>
                 <!-- Youtube -->
                 <b-col class="bg-youtube-custom">

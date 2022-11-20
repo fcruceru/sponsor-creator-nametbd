@@ -8,6 +8,8 @@ const app = express();
 app.use(express.json());
 const port = 3000;
 
+const fetch = require("node-fetch"); // TODO: Consider switching to v3 (needs ESM to work)
+
 // Setting CORS on all requests
 app.use(cors());
 
@@ -27,7 +29,7 @@ app.get("/resetDb", (req, res) => {
     } catch (error) {
         return res.status(500).send("Error: \n" + error.message);
     }
-}); 
+});
 
 app.post("/register", async (req, res) => {
     try {
@@ -188,6 +190,23 @@ app.post("/updateTwitchMetrics", async (req, res) => {
     } catch (error) {
         console.error(error.response.data);
         //return res.status(500).send("Error: \n" + error.response.data.message);
+    }
+
+    // Get metrics from twitchTracker
+    // TODO: Look into implementing this properly
+    // Setting subs to >0 for testing
+    channelInformation.total_subs++;
+    if (channelInformation.total_subs > 0) {
+        // TODO: Rework this in a cleaner way
+        try {
+            await fetch(`https://twitchtracker.com/api/channels/summary/Fuzzyfoyz`).then(async (res) => {
+                let trackerStats = await res.json();
+                channelInformation = { ...channelInformation, ...trackerStats };
+            });
+        } catch (error) {
+            console.error(error.response.data);
+            return res.status(500).send("Error: \n" + error.response.data.message);
+        }
     }
 
     // Save to user model
