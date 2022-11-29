@@ -18,7 +18,7 @@ export default {
             state.user = user;
             state.loggedIn = true;
         },
-        logout(state) {
+        logout(state) { // TODO: Fix NavigationDuplicated error
             state.user = null;
             state.loggedIn = false;
         },

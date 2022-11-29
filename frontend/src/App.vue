@@ -19,9 +19,8 @@ export default {
         // Twitch redirect ghetto fix
         if (window.location.href.indexOf("code") > -1) {
             // Get code from URL and reload page
-            let url = window.location.href.substring(0, window.location.href.length - 2);
-            let code = url.substring(url.indexOf("?code=") + 6, url.indexOf("subscriptions") + 14);
-            //window.location = `http://localhost:8080/#/`;
+            let url = window.location.href;
+            let code = url.slice(url.indexOf("?code=") + 6, url.indexOf("subscriptions") + 14)
             this.$router.replace({...this.$router.currentRoute});
             // Display waiting popup
             Vue.swal({
