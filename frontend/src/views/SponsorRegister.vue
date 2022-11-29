@@ -65,10 +65,10 @@
 import Vue from "vue";
 import vueCountryRegionSelect from "vue-country-region-select";
 Vue.use(vueCountryRegionSelect);
+
 import Multiselect from "vue-multiselect";
 import VuePhoneNumberInput from "vue-phone-number-input";
 import "vue-phone-number-input/dist/vue-phone-number-input.css";
-import Swal from "sweetalert2";
 
 export default {
     components: { Multiselect, VuePhoneNumberInput },
@@ -98,9 +98,9 @@ export default {
         register(event) {
             event.preventDefault();
             if (this.form.preferences.value == null || this.form.preferences.value.length == 0) {
-                Swal.fire("Error", "You must select at least one preferred media source.", "error");
+                Swal.fire("Error", "You must select at least one preferred media source.", "error"); // TODO: Replace with vue-swal
             } else if (this.form.products.value == null || this.form.products.value.length == 0) {
-                Swal.fire("Error", "You must select at least one product.", "error");
+                Swal.fire("Error", "You must select at least one product.", "error"); // TODO: Replace with vue-swal
             } else {
                 console.log(this.form)
                 this.$store.dispatch("auth/registerSponsor", this.form).then((res) => {

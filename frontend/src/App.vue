@@ -7,20 +7,46 @@
 
 <script>
 import Header from "@/components/Header";
+import Vue from "vue";
+
 export default {
     components: {
         Header
     },
     mounted() {
+        // refresh -> popup -> load & close popup
+
         // Twitch redirect ghetto fix
         if (window.location.href.indexOf("code") > -1) {
+            // Get code from URL and reload page
             let url = window.location.href.substring(0, window.location.href.length - 2);
             let code = url.substring(url.indexOf("?code=") + 6, url.indexOf("subscriptions") + 14);
+            //window.location = `http://localhost:8080/#/`;
+            this.$router.replace({...this.$router.currentRoute});
+            // Display waiting popup
+            Vue.swal({
+                title: "Please Wait",
+                text: "Aggregating metrics...",
+                icon: "info",
+                allowEnterKey: false,
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                willOpen: () => {
+                    Vue.swal.showLoading();
+                }
+            });
             // TODO: Consider refactoring this
             this.$store.dispatch("auth/setTwitchToken", code).then(() => {
                 this.$store.dispatch("auth/updateTwitchMetrics").then(() => {
-                    window.location = `http://localhost:8080/#/`;
-                }); 
+                    Vue.swal.update({
+                        title: "Success",
+                        text: "All done!",
+                        icon: "success"
+                    });
+                    setTimeout(() => {
+                        Vue.swal.close();
+                    }, 2000);
+                });
             });
         }
     }

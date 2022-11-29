@@ -30,7 +30,7 @@ app.get("/resetDb", (req, res) => {
         return res.status(500).send("Error: \n" + error.message);
     }
 });
-
+// TODO: Fix auth on register (logout on register)
 app.post("/register", async (req, res) => {
     try {
         let type = req.query.type;

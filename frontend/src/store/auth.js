@@ -2,7 +2,6 @@ import Vue from "vue";
 const axios = require("axios");
 const api = require("../../utils/api");
 import { router } from "../router";
-import Swal from "sweetalert2";
 
 export default {
     namespaced: true,
