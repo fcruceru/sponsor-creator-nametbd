@@ -1,5 +1,6 @@
 <template>
     <div id="app">
+        <Banner />
         <Header />
         <router-view />
     </div>
@@ -7,10 +8,12 @@
 
 <script>
 import Header from "@/components/Header";
+import Banner from "@/components/Banner";
 import Vue from "vue";
 
 export default {
     components: {
+        Banner,
         Header
     },
     mounted() {
@@ -20,8 +23,8 @@ export default {
         if (window.location.href.indexOf("code") > -1) {
             // Get code from URL and reload page
             let url = window.location.href;
-            let code = url.slice(url.indexOf("?code=") + 6, url.indexOf("subscriptions") + 14)
-            this.$router.replace({...this.$router.currentRoute});
+            let code = url.slice(url.indexOf("?code=") + 6, url.indexOf("subscriptions") + 14);
+            this.$router.replace({ ...this.$router.currentRoute });
             // Display waiting popup
             Vue.swal({
                 title: "Please Wait",

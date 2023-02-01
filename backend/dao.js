@@ -8,7 +8,7 @@ module.exports.resetDb = function () {
     this.deleteDb();
     // Add creator table
     db.exec(
-        "CREATE TABLE IF NOT EXISTS creator(ID INTEGER PRIMARY KEY, username varchar(50), email varchar(50), first_name varchar(50), last_name varchar(50), password CHAR(60), country varchar(50), date_of_birth text, twitch_token text, twitch_metrics text, rank text, state text)"
+        "CREATE TABLE IF NOT EXISTS creator(ID INTEGER PRIMARY KEY, username varchar(50), email varchar(50), first_name varchar(50), last_name varchar(50), password CHAR(60), country varchar(50), date_of_birth text, twitch_token text, twitch_metrics text, rank text, state text, youtube_metrics text)"
     );
     // Add sponsor table
     db.exec(
@@ -84,6 +84,7 @@ module.exports.getUserById = function (type, id) {
     if (type == "creator") {
         data.twitch_token = JSON.parse(data.twitch_token);
         data.twitch_metrics = JSON.parse(data.twitch_metrics);
+        data.youtube_metrics = JSON.parse(data.youtube_metrics);
         return new Creator(data);
     } else if (type == "sponsor") {
         return new Sponsor(data);
@@ -99,6 +100,7 @@ module.exports.getUserByEmail = function (type, email) {
     if (type == "creator") {
         data.twitch_token = JSON.parse(data.twitch_token);
         data.twitch_metrics = JSON.parse(data.twitch_metrics);
+        data.youtube_metrics = JSON.parse(data.youtube_metrics);
         return new Creator(data);
     } else if (type == "sponsor") {
         return new Sponsor(data);

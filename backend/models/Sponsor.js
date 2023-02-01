@@ -1,9 +1,9 @@
 const SPONSOR_STATES = {
-    "ACTIVE": "ACTIVE",
-    "PENDING_APPROVAL": "PENDING_APPROVAL",
-    "BANNED": "BANNED",
+    ACTIVE: "ACTIVE",
+    EMAIL_PENDING: "EMAIL_PENDING",
+    BANNED: "BANNED",
 
-    "UNKNOWN": "UNKNOWN"
+    UNKNOWN: "UNKNOWN"
 };
 
 const schema = {
@@ -28,7 +28,6 @@ const Sponsor = function (data) {
         this[key] = data[key] || Sponsor[key];
     }
 };
-
 
 Sponsor.prototype.SPONSOR_STATES = Sponsor.SPONSOR_STATES = SPONSOR_STATES;
 

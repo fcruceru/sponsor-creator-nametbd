@@ -1,15 +1,16 @@
 const CREATOR_RANKS = {
-    "NORMAL": "NORMAL", // TODO: Look into renaming this
-    "ADMIN": "ADMIN",
+    NORMAL: "NORMAL", // TODO: Look into renaming this
+    ADMIN: "ADMIN",
 
-    "UNKNOWN": "UNKNOWN"
+    UNKNOWN: "UNKNOWN"
 };
 
 const CREATOR_STATES = {
-    "ACTIVE": "ACTIVE",
-    "BANNED": "BANNED",
+    ACTIVE: "ACTIVE",
+    EMAIL_PENDING: "EMAIL_PENDING",
+    BANNED: "BANNED",
 
-    "UNKNOWN": "UNKNOWN"
+    UNKNOWN: "UNKNOWN"
 };
 
 const schema = {
@@ -24,7 +25,8 @@ const schema = {
     rank: CREATOR_RANKS.UNKNOWN,
     state: CREATOR_RANKS.UNKNOWN,
     twitch_token: null,
-    twitch_metrics: null
+    twitch_metrics: null,
+    youtube_metrics: null
 };
 
 const Creator = function (data) {
